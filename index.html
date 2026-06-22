@@ -1,46 +1,39 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-    const noBtn = document.getElementById('noBtn');
-    const yesBtn = document.getElementById('yesBtn');
-    const heading = document.getElementById('heading');
-    const greetingText = document.getElementById('greetingText');
-    const revealImg = document.getElementById('revealImg');
-    const body = document.body;
+    document.addEventListener('DOMContentLoaded', () => {
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const heading = document.getElementById('heading');
+        const greetingText = document.getElementById('greetingText');
+        const revealImg = document.getElementById('revealImg');
+        const body = document.body;
 
-    // Trigger on both mouseover (laptop) and touchstart (mobile)
-    noBtn.addEventListener('mouseover', moveButton);
-    noBtn.addEventListener('touchstart', (e) => {
-        e.preventDefault(); // Prevents clicking the button under the finger
-        moveButton();
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
+
+        function moveButton() {
+            const padding = 20;
+            const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+            const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+            const x = Math.max(padding, Math.random() * maxX);
+            const y = Math.max(padding, Math.random() * maxY);
+            
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+            
+            body.style.background = `linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16)} 0%, #ff758c 100%)`;
+            const currentScale = parseFloat(yesBtn.style.transform.replace('scale(', '').replace(')', '')) || 1;
+            yesBtn.style.transform = `scale(${Math.min(currentScale + 0.15, 2)})`;
+        }
+
+        window.celebrate = function() {
+            body.style.background = "#ff758c";
+            greetingText.innerHTML = "You're mine now! 😉";
+            heading.innerHTML = "I knew you always had a secret crush on me!";
+            revealImg.style.display = 'block';
+            document.querySelector('.buttons').style.display = 'none';
+            confetti({ particleCount: 500, spread: 200, origin: { y: 0.6 } });
+        };
     });
-
-    function moveButton() {
-        // Calculate safe boundaries to keep button on screen and away from Yes button
-        const padding = 20;
-        const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-        const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-
-        const x = Math.max(padding, Math.random() * maxX);
-        const y = Math.max(padding, Math.random() * maxY);
-        
-        noBtn.style.position = 'fixed';
-        noBtn.style.left = x + 'px';
-        noBtn.style.top = y + 'px';
-        
-        // Change color for "Rizz" effect
-        body.style.background = `linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16)} 0%, #ff758c 100%)`;
-        
-        // Grow Yes button
-        const currentScale = parseFloat(yesBtn.style.transform.replace('scale(', '').replace(')', '')) || 1;
-        yesBtn.style.transform = `scale(${Math.min(currentScale + 0.15, 2)})`; // Limits growth to 2x size
-    }
-
-    function celebrate() {
-        body.style.background = "#ff758c";
-        greetingText.innerHTML = "You're mine now! 😉";
-        heading.innerHTML = "I knew you always had a secret crush on me!";
-        revealImg.style.display = 'block';
-        document.querySelector('.buttons').style.display = 'none';
-        confetti({ particleCount: 500, spread: 200, origin: { y: 0.6 } });
-    }
 </script>
